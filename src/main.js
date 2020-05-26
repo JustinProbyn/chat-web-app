@@ -29,7 +29,7 @@ new Vue({
   created() {
     firebase.auth().onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
-        console.log(`${firebaseUser} is signed in`);
+        console.log(`${firebaseUser.email} is signed in.`);
       }
     });
   },

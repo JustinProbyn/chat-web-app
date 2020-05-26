@@ -4,6 +4,18 @@
   </div>
 </template>
 
+<script>
+/**
+ * The main Page that displays all other routes.
+ * Dispatches actions when it is loaded.
+ */
+export default {
+  created() {
+    this.$store.dispatch("onPageReload");
+  }
+};
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

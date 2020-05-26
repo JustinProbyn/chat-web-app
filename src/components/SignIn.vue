@@ -1,8 +1,7 @@
 <template>
-  <div class="form" @keyup.enter.native="submit">
-    <v-card style="padding: 15px" width="500px" class="mx-auto mt-10">
-      <h2 class="display-1">Sign In</h2>
-
+  <div class="form" @keyup.enter="submit">
+    <h2 class="display-1">Sign In</h2>
+    <div class="inputs">
       <input
         type="text"
         v-model="email"
@@ -21,7 +20,7 @@
         <button :disabled="$v.$invalid" @click="submit">submit</button>
         <!-- <v-btn color="info" @click="goToSignUp">Register</v-btn> -->
       </div>
-    </v-card>
+    </div>
   </div>
 </template>
 

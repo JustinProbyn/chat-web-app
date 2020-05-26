@@ -1,5 +1,9 @@
 <template>
-  <div class="home_container" :class="nightmode ? 'nightmode' : 'daymode'">
+  <div
+    @keyup.enter="submit"
+    class="home_container"
+    :class="getTheme ? 'nightmode' : 'daymode'"
+  >
     <div class="user_buttons">
       <button @click="displaySignUp">
         <router-link to="signup">Sign up</router-link>
@@ -7,18 +11,19 @@
       <button @click="displaySignIn">
         <router-link to="signin">Sign in</router-link>
       </button>
+      <button @click="signOut">Sign out</button>
     </div>
     <div class="mode_buttons">
-      <button @click="nightmode = true" class="mode_button">
+      <button @click="nightMode" class="mode_button">
         Night mode
       </button>
-      <button @click="nightmode = false" class="mode_button">Day mode</button>
+      <button @click="dayMode" class="mode_button">Day mode</button>
     </div>
     <div class="main_panel">
       <div class="sidebar"></div>
       <div class="chatbox">
-        <div class="text_display">
-          {{ chatText }}
+        <div v-for="(text, i) in chatText" :key="i" class="text_display">
+          {{ text }}
         </div>
         <div class="text_input">
           <button @click="submit" class="text_input-button">Submit</button>
@@ -35,19 +40,37 @@
 export default {
   data() {
     return {
-      chatText: "",
+      chatText: new Set(),
       chatTyping: "",
       nightmode: false,
       daymode: true
     };
   },
+  computed: {
+    getTheme() {
+      return this.$store.getters.getTheme;
+    }
+  },
   methods: {
-    submit() {
-      this.chatText = this.chatTyping;
-      // store chat logs in store
+    // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
+    nightMode() {
+      this.$store.dispatch("nightMode");
     },
+    dayMode() {
+      this.$store.dispatch("dayMode");
+    },
+    // store chatlogs in store
+    submit() {
+      this.chatText.add(this.chatTyping);
+      console.log(this.chatText);
+      this.chatTyping = "";
+    },
+    // Displays signin/signup modals
     displaySignIn() {},
-    displaySignUp() {}
+    displaySignUp() {},
+    signOut() {
+      this.$store.dispatch("firestoreSignOut"); //Action in firestore.js module
+    }
   }
 };
 </script>

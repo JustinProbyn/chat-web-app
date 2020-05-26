@@ -1,40 +1,42 @@
 <template>
-  <div class="form" @keyup.enter.native="submit">
-    <div tyle="padding: 15px" width="500px" class="form mx-auto mt-10">
-      <h2 class="display-1">Sign Up</h2>
-      <div class="inputs">
-        <input
-          type="text"
-          v-model="username"
-          :error-messages="nameErrors"
-          @input="$v.username.$touch()"
-          @blur="$v.username.$touch()"
-        />
-        <input
-          type="text"
-          v-model="email"
-          :error-messages="emailErrors"
-          @input="$v.email.$touch()"
-          @blur="$v.email.$touch()"
-        />
-        <input
-          type="text"
-          v-model="password"
-          :error-messages="passwordErrors"
-          @input="$v.password.$touch()"
-        />
-        <input
-          type="text"
-          v-model="confirmPassword"
-          :error-messages="confirmPasswordErrors"
-          @input="$v.confirmPassword.$touch()"
-          @blur="$v.confirmPassword.$touch()"
-        />
-        <div class="btns">
-          <button :disabled="$v.$invalid" @click="submit">
-            Submit
-          </button>
-        </div>
+  <div class="form" @keyup.enter="submit">
+    <h2 class="display-1">Sign Up</h2>
+    <div class="inputs">
+      <label>Username</label>
+      <input
+        type="text"
+        v-model="username"
+        :error-messages="nameErrors"
+        @input="$v.username.$touch()"
+        @blur="$v.username.$touch()"
+      />
+      <label>Email</label>
+      <input
+        type="text"
+        v-model="email"
+        :error-messages="emailErrors"
+        @input="$v.email.$touch()"
+        @blur="$v.email.$touch()"
+      />
+      <label>Password</label>
+      <input
+        type="text"
+        v-model="password"
+        :error-messages="passwordErrors"
+        @input="$v.password.$touch()"
+      />
+      <label>Confirm Password</label>
+      <input
+        type="text"
+        v-model="confirmPassword"
+        :error-messages="confirmPasswordErrors"
+        @input="$v.confirmPassword.$touch()"
+        @blur="$v.confirmPassword.$touch()"
+      />
+      <div class="btns">
+        <button :disabled="$v.$invalid" @click="submit">
+          Submit
+        </button>
       </div>
     </div>
   </div>
@@ -119,6 +121,7 @@ export default {
         email: this.email,
         password: this.password
       };
+      console.log(userData);
       this.$store.dispatch("firestoreSignUp", userData);
     }
   }

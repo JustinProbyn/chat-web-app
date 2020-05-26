@@ -14,7 +14,7 @@ const firestore = {
         });
     },
     // Signs user up with Firestore
-    firestoreSignUp(userData) {
+    firestoreSignUp(state, userData) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(userData.email, userData.password)
@@ -32,6 +32,18 @@ const firestore = {
         .catch(function(error) {
           alert(error.message);
         });
+    },
+    firestoreSignOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(function() {
+          console.log("Sign-out successful.");
+        })
+        .catch(function(er) {
+          console.log(er);
+        });
+      localStorage.removeItem("nightmode");
     }
   }
 };
