@@ -1,0 +1,57 @@
+.home_container {
+  height: 100vh;
+}
+
+.main_panel {
+  @include flexCenter(row);
+}
+
+.nightmode {
+  background: rgb(2, 26, 32);
+  height: 100vh;
+  color: #fff;
+  .sidebar {
+    border: solid 1px #fff;
+  }
+  .chatbox {
+    border: solid 1px #fff;
+  }
+}
+
+.daymode {
+  background: #fff;
+  height: 100vh;
+  color: #000;
+  .sidebar {
+    border: solid 1px #000;
+  }
+  .chatbox {
+    border: solid 1px #000;
+  }
+}
+
+.mode_button {
+  background: $primaryBtn;
+  &:hover {
+    background: red;
+  }
+}
+
+.sidebar {
+  width: 20%;
+  height: 95vh;
+}
+
+.chatbox {
+  width: 80%;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.text_input {
+  position: absolute;
+  width: 75%;
+  align-self: center;
+  margin-top: 40%;
+}
