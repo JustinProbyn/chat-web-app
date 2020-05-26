@@ -1,3 +1,6 @@
+/**********************/
+/***GENERAL***********/
+
 .home_container {
   height: 100vh;
 }
@@ -5,6 +8,9 @@
 .main_panel {
   @include flexCenter(row);
 }
+
+/**********************/
+/***DAY/NIGHT MODE****/
 
 .nightmode {
   background: rgb(2, 26, 32);
@@ -37,10 +43,16 @@
   }
 }
 
+/**********************/
+/***SIDEBAR***********/
+
 .sidebar {
   width: 20%;
   height: 95vh;
 }
+
+/**********************/
+/***CHATBOX***********/
 
 .chatbox {
   width: 80%;
@@ -49,9 +61,29 @@
   flex-direction: column;
 }
 
+// Text input
+.text_display {
+  display: flex;
+  height: 80%;
+  width: 95%;
+  padding: 20px;
+  align-content: flex-start;
+  margin-left: 70px;
+}
+
 .text_input {
-  position: absolute;
-  width: 75%;
+  display: flex;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+.text_input-bar {
+  width: 92%;
   align-self: center;
-  margin-top: 40%;
+  margin-top: 45%;
+}
+
+.text_input-button {
+  height: 20px;
+  margin-top: 45%;
+  margin-right: 10px;
 }
