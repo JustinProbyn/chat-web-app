@@ -1,5 +1,4 @@
 import firebase from "firebase";
-import router from "../../router";
 
 const firestore = {
   state: {},
@@ -15,7 +14,7 @@ const firestore = {
         });
     },
     // Signs user up with Firestore
-    firestoreSignUp({ commit }, userData) {
+    firestoreSignUp(userData) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(userData.email, userData.password)
@@ -34,3 +33,7 @@ const firestore = {
           alert(error.message);
         });
     }
+  }
+};
+
+export default firestore;

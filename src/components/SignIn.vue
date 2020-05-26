@@ -1,42 +1,28 @@
 <template>
-  <v-app class="form" @keyup.enter.native="submit">
+  <div class="form" @keyup.enter.native="submit">
     <v-card style="padding: 15px" width="500px" class="mx-auto mt-10">
-      <v-card-title>
-        <h2 class="display-1">Sign In</h2>
-      </v-card-title>
-      <v-text-field
-        outlined
-        prepend-inner-icon="mdi-email"
+      <h2 class="display-1">Sign In</h2>
+
+      <input
+        type="text"
         v-model="email"
         :error-messages="emailErrors"
-        label="E-mail"
-        required
         @input="$v.email.$touch()"
         @blur="$v.email.$touch()"
-      ></v-text-field>
-      <v-text-field
-        outlined
-        prepend-inner-icon="mdi-lock"
+      />
+      <input
+        type="text"
         v-model="password"
         :error-messages="passwordErrors"
-        label="Password"
-        required
-        type="password"
         @input="$v.password.$touch()"
         @blur="$v.password.$touch()"
-      ></v-text-field>
+      />
       <div class="btns">
-        <v-btn
-          color="success"
-          :disabled="$v.$invalid"
-          class="mr-4"
-          @click="submit"
-          >submit</v-btn
-        >
+        <button :disabled="$v.$invalid" @click="submit">submit</button>
         <!-- <v-btn color="info" @click="goToSignUp">Register</v-btn> -->
       </div>
     </v-card>
-  </v-app>
+  </div>
 </template>
 
 <script>

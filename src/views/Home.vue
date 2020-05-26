@@ -1,8 +1,12 @@
 <template>
   <div class="home_container" :class="nightmode ? 'nightmode' : 'daymode'">
     <div class="user_buttons">
-      <button @click="signup">Sign up</button>
-      <button @click="signin">Sign in</button>
+      <button @click="displaySignUp">
+        <router-link to="signup">Sign up</router-link>
+      </button>
+      <button @click="displaySignIn">
+        <router-link to="signin">Sign in</router-link>
+      </button>
     </div>
     <div class="mode_buttons">
       <button @click="nightmode = true" class="mode_button">
@@ -41,13 +45,9 @@ export default {
     submit() {
       this.chatText = this.chatTyping;
       // store chat logs in store
-    }
-    // signin () {
-    //   this.$store.dispatch("firestoreSignIn", userData)
-    // },
-    // signup () {
-    //   this.$store.dispatch("firestoreSignUp", userData)
-    // }
+    },
+    displaySignIn() {},
+    displaySignUp() {}
   }
 };
 </script>
