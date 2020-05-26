@@ -2,7 +2,7 @@
 
 A chat app for the web using Vuejs (Vuex, Vue Router) and SASS
 
-This is my first time using SASS. This project is a means to teach myself the language.
+This is my first time using SASS. This project is a means to teach myself the language and to style independantly of Vuetify and Bootstrap.
 
 ## Project setup
 ```
