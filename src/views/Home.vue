@@ -6,12 +6,20 @@
   >
     <div class="user_buttons">
       <button @click="displaySignUp">
-        <router-link to="signup">Sign up</router-link>
+        Sign up
       </button>
       <button @click="displaySignIn">
-        <router-link to="signin">Sign in</router-link>
+        Sign in
       </button>
       <button @click="signOut">Sign out</button>
+    </div>
+    <div class="authModals">
+      <div id="signin-modal">
+        <signin></signin>
+      </div>
+      <div id="signup-modal">
+        <signup></signup>
+      </div>
     </div>
     <div class="mode_buttons">
       <button v-if="!getTheme" @click="nightMode" class="mode_button">
@@ -40,10 +48,19 @@
 
 <script>
 // @ is an alias to /src
-
+import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 export default {
+  components: {
+    signin: SignIn,
+    signup: SignUp
+  },
   data() {
     return {
+      // modal
+      signinDisplay: false,
+      signupDisplay: false,
+      //
       chatData: [],
       chatTyping: "",
       nightmode: false,
@@ -82,8 +99,32 @@ export default {
       this.chatTyping = "";
     },
     // Displays signin/signup modals
-    displaySignIn() {},
-    displaySignUp() {},
+    displaySignIn() {
+      const signinModal = document.getElementById("signin-modal");
+      const signupModal = document.getElementById("signup-modal");
+      signupModal.style.display = "none";
+      this.signupDisplay = false;
+      if (this.signinDisplay == true) {
+        signinModal.style.display = "none";
+        this.signinDisplay = false;
+      } else if (this.signinDisplay == false) {
+        signinModal.style.display = "block";
+        this.signinDisplay = true;
+      }
+    },
+    displaySignUp() {
+      const signupModal = document.getElementById("signup-modal");
+      const signinModal = document.getElementById("signin-modal");
+      this.signinDisplay = false;
+      signinModal.style.display = "none";
+      if (this.signupDisplay == true) {
+        signupModal.style.display = "none";
+        this.signupDisplay = false;
+      } else if (this.signupDisplay == false) {
+        signupModal.style.display = "block";
+        this.signupDisplay = true;
+      }
+    },
     signOut() {
       this.$store.dispatch("firestoreSignOut"); //Action in firestore.js module
     }
