@@ -14,16 +14,20 @@
       <button @click="signOut">Sign out</button>
     </div>
     <div class="mode_buttons">
-      <button @click="nightMode" class="mode_button">
+      <button v-if="!getTheme" @click="nightMode" class="mode_button">
         Night mode
       </button>
-      <button @click="dayMode" class="mode_button">Day mode</button>
+      <button v-if="getTheme" @click="dayMode" class="mode_button">
+        Day mode
+      </button>
     </div>
     <div class="main_panel">
       <div class="sidebar"></div>
       <div class="chatbox">
-        <div v-for="(text, i) in chatText" :key="i" class="text_display">
-          {{ text }}
+        <div v-for="(data, i) in getChatLogs" :key="i" class="text_display">
+          <div class="text_display-username">{{ data.username }}:</div>
+          <div class="text_display-chat">{{ data.chat }}</div>
+          <div class="text_display-date">on {{ data.date }}</div>
         </div>
         <div class="text_input">
           <button @click="submit" class="text_input-button">Submit</button>
@@ -40,7 +44,7 @@
 export default {
   data() {
     return {
-      chatText: new Set(),
+      chatData: [],
       chatTyping: "",
       nightmode: false,
       daymode: true
@@ -49,6 +53,12 @@ export default {
   computed: {
     getTheme() {
       return this.$store.getters.getTheme;
+    },
+    getCurrentUserName() {
+      return this.$store.getters.getCurrentUserName;
+    },
+    getChatLogs() {
+      return this.$store.getters.getChatLogs;
     }
   },
   methods: {
@@ -61,8 +71,14 @@ export default {
     },
     // store chatlogs in store
     submit() {
-      this.chatText.add(this.chatTyping);
-      console.log(this.chatText);
+      const userChatData = {
+        chat: this.chatTyping,
+        username: this.getCurrentUserName,
+        date: Date()
+      };
+      this.$store.dispatch("addUserChatToFireStore", userChatData);
+      this.$store.dispatch("storeChatLogsInState", userChatData);
+      console.log(this.chatData);
       this.chatTyping = "";
     },
     // Displays signin/signup modals

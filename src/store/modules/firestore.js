@@ -4,17 +4,28 @@ const firestore = {
   state: {},
   mutations: {},
   actions: {
-    // Signs in with firestore
-    firestoreSignIn(state, userData) {
+    // Signs in with Firestore
+    firestoreSignIn({ commit }, userData) {
       firebase
         .auth()
         .signInWithEmailAndPassword(userData.email, userData.password)
         .catch(function(error) {
           alert(error.message);
+        })
+        .then(() => {
+          firebase
+            .firestore()
+            .collection("userdata")
+            .doc(userData.email)
+            .get()
+            .then((snapShot) => {
+              commit("storeUsername", snapShot.data().username);
+              localStorage.setItem("username", snapShot.data().username);
+            });
         });
     },
     // Signs user up with Firestore
-    firestoreSignUp(state, userData) {
+    firestoreSignUp({ commit }, userData) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(userData.email, userData.password)
@@ -32,8 +43,11 @@ const firestore = {
         .catch(function(error) {
           alert(error.message);
         });
+      commit("storeUsername", userData.username);
+      localStorage.setItem("username", userData.username);
     },
-    firestoreSignOut() {
+    // Signs user out with Firestore
+    firestoreSignOut({ commit }) {
       firebase
         .auth()
         .signOut()
@@ -44,6 +58,23 @@ const firestore = {
           console.log(er);
         });
       localStorage.removeItem("nightmode");
+      localStorage.removeItem("username");
+      commit("removeUserName");
+    },
+
+    /********************/
+    // Adds each chat message message of a specific user to their user profile on Firestore
+    addUserChatToFireStore(state, userChatData) {
+      console.log(userChatData);
+      const user = firebase.auth().currentUser;
+      const fireStoreRef = firebase
+        .firestore()
+        .collection("userdata")
+        .doc(user.email)
+        .collection("chatLogs");
+      fireStoreRef.add({
+        userChatData
+      });
     }
   }
 };

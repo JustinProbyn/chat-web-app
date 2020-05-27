@@ -30,6 +30,7 @@ new Vue({
     firebase.auth().onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
         console.log(`${firebaseUser.email} is signed in.`);
+        this.$store.dispatch("storeUserEmail", firebaseUser.email);
       }
     });
   },
