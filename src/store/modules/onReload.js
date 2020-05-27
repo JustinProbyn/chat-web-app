@@ -24,17 +24,22 @@ const onReload = {
       /**** fetches chat logs from firestore ****/
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          const fireStoreRef = firebase
-            .firestore()
-            .collection("userdata")
-            .doc(user.email)
-            .collection("chatLogs");
+          const fireStoreRef = firebase.firestore().collection("userdata");
           fireStoreRef.get().then((snapShot) => {
             snapShot.forEach((doc) => {
-              const chatData = doc.data().userChatData;
-              commit("storeChatLogsInState", chatData);
-
-              // this.$store.dispatch("loadChatMsgs", chatData);
+              console.log(doc.data().email);
+              const userEmail = doc.data().email;
+              const fireStoreRef = firebase
+                .firestore()
+                .collection("userdata")
+                .doc(userEmail)
+                .collection("chatLogs");
+              fireStoreRef.get().then((snapShot) => {
+                snapShot.forEach((doc) => {
+                  const chatData = doc.data().userChatData;
+                  commit("storeChatLogsInState", chatData);
+                });
+              });
             });
           });
         }
