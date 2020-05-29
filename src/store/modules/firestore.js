@@ -64,10 +64,10 @@ const firestore = {
 
     /********************/
     // Adds each chat message of a specific user to their user profile on Firestore
-    addUserChatToFireStore(state, userChatData) {
+    async addUserChatToFireStore(state, userChatData) {
       console.log(userChatData);
-      const user = firebase.auth().currentUser;
-      const fireStoreRef = firebase
+      const user = await firebase.auth().currentUser;
+      const fireStoreRef = await firebase
         .firestore()
         .collection("userdata")
         .doc(user.email)

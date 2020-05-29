@@ -1,4 +1,4 @@
-<template>
+<template :key="reload">
   <div
     @keyup.enter="submit"
     class="home_container"
@@ -12,10 +12,11 @@
         Sign in
       </button>
       <button @click="signOut">Sign out</button>
+      <button @click="test">Test</button>
     </div>
     <div class="authModals">
       <div id="signin-modal">
-        <signin></signin>
+        <signin @signedIn="reloadPage"></signin>
       </div>
       <div id="signup-modal">
         <signup></signup>
@@ -32,7 +33,11 @@
     <div class="main_panel">
       <div class="sidebar"></div>
       <div class="chatbox">
-        <div v-for="(data, i) in getChatLogs" :key="i" class="text_display">
+        <div
+          v-for="(data, i) in orderChatsByDate"
+          :key="i"
+          class="text_display"
+        >
           <div class="text_display-username">{{ data.username }}:</div>
           <div class="text_display-chat">{{ data.chat }}</div>
           <div class="text_display-date">on {{ data.date }}</div>
@@ -41,12 +46,16 @@
           <button @click="submit" class="text_input-button">Submit</button>
           <input v-model="chatTyping" type="text" class="text_input-bar" />
         </div>
+        <div v-if="auth" class="not-siginedin">
+          <p>Please sign in to chat</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
 // @ is an alias to /src
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
@@ -64,10 +73,14 @@ export default {
       chatData: [],
       chatTyping: "",
       nightmode: false,
-      daymode: true
+      daymode: true,
+      reload: 0
     };
   },
   computed: {
+    auth() {
+      return firebase.auth().currentUser;
+    },
     getTheme() {
       return this.$store.getters.getTheme;
     },
@@ -76,9 +89,33 @@ export default {
     },
     getChatLogs() {
       return this.$store.getters.getChatLogs;
+    },
+    orderChatsByDate() {
+      const timesOrdered = [];
+      const datesOrdered = [];
+      this.getChatLogs.forEach((el) => {
+        timesOrdered.push(el.dateMilSec);
+        timesOrdered.sort(function(a, b) {
+          return a - b;
+        });
+      });
+      timesOrdered.forEach((timeSec) => {
+        this.getChatLogs.forEach((time) => {
+          if (timeSec == time.dateMilSec) {
+            datesOrdered.unshift(time);
+          }
+        });
+      });
+      return datesOrdered.reverse();
     }
   },
   methods: {
+    reloadPage() {
+      this.reload++;
+    },
+    test() {
+      console.log(this.auth);
+    },
     // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
     nightMode() {
       this.$store.dispatch("nightMode");
@@ -91,7 +128,8 @@ export default {
       const userChatData = {
         chat: this.chatTyping,
         username: this.getCurrentUserName,
-        date: Date()
+        date: Date(),
+        dateMilSec: new Date().getTime()
       };
       this.$store.dispatch("addUserChatToFireStore", userChatData);
       this.$store.dispatch("storeChatLogsInState", userChatData);
@@ -127,6 +165,7 @@ export default {
     },
     signOut() {
       this.$store.dispatch("firestoreSignOut"); //Action in firestore.js module
+      this.reload++;
     }
   }
 };

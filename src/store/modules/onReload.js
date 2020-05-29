@@ -27,7 +27,6 @@ const onReload = {
           const fireStoreRef = firebase.firestore().collection("userdata");
           fireStoreRef.get().then((snapShot) => {
             snapShot.forEach((doc) => {
-              console.log(doc.data().email);
               const userEmail = doc.data().email;
               const fireStoreRef = firebase
                 .firestore()
