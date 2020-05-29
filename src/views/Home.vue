@@ -1,22 +1,22 @@
-<template :key="reload">
+<template class="home" :key="reload">
   <div
     @keyup.enter="submit"
     class="home_container"
     :class="getTheme ? 'nightmode' : 'daymode'"
   >
     <div class="user_buttons">
-      <button @click="displaySignUp">
+      <button v-if="!getCurrentUserName" @click="displaySignUp">
         Sign up
       </button>
-      <button @click="displaySignIn">
+      <button v-if="!getCurrentUserName" @click="displaySignIn">
         Sign in
       </button>
-      <button @click="signOut">Sign out</button>
+      <button v-if="getCurrentUserName" @click="signOut">Sign out</button>
       <button @click="test">Test</button>
     </div>
     <div class="authModals">
       <div id="signin-modal">
-        <signin @signedIn="reloadPage"></signin>
+        <signin></signin>
       </div>
       <div id="signup-modal">
         <signup></signup>
@@ -33,21 +33,28 @@
     <div class="main_panel">
       <div class="sidebar"></div>
       <div class="chatbox">
+        <div class="user_image"></div>
         <div
           v-for="(data, i) in orderChatsByDate"
           :key="i"
           class="text_display"
         >
-          <div class="text_display-username">{{ data.username }}:</div>
+          <div class="text_display-username">
+            <strong>{{ data.username }}:</strong>
+          </div>
+          <br />
           <div class="text_display-chat">{{ data.chat }}</div>
           <div class="text_display-date">on {{ data.date }}</div>
         </div>
         <div class="text_input">
-          <button @click="submit" class="text_input-button">Submit</button>
+          <button
+            :disabled="chatTyping ? false : true"
+            @click="submit"
+            class="text_input-button"
+          >
+            Submit
+          </button>
           <input v-model="chatTyping" type="text" class="text_input-bar" />
-        </div>
-        <div v-if="auth" class="not-siginedin">
-          <p>Please sign in to chat</p>
         </div>
       </div>
     </div>
@@ -55,7 +62,6 @@
 </template>
 
 <script>
-import firebase from "firebase";
 // @ is an alias to /src
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
@@ -78,9 +84,6 @@ export default {
     };
   },
   computed: {
-    auth() {
-      return firebase.auth().currentUser;
-    },
     getTheme() {
       return this.$store.getters.getTheme;
     },
@@ -114,7 +117,7 @@ export default {
       this.reload++;
     },
     test() {
-      console.log(this.auth);
+      this.reload++;
     },
     // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
     nightMode() {
