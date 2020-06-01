@@ -1,4 +1,4 @@
-import firebase from "firebase";
+// import firebase from "firebase";
 
 const onReload = {
   state: {},
@@ -22,27 +22,6 @@ const onReload = {
       }
 
       /**** fetches chat logs from firestore ****/
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          const fireStoreRef = firebase.firestore().collection("userdata");
-          fireStoreRef.get().then((snapShot) => {
-            snapShot.forEach((doc) => {
-              const userEmail = doc.data().email;
-              const fireStoreRef = firebase
-                .firestore()
-                .collection("userdata")
-                .doc(userEmail)
-                .collection("chatLogs");
-              fireStoreRef.get().then((snapShot) => {
-                snapShot.forEach((doc) => {
-                  const chatData = doc.data().userChatData;
-                  commit("storeChatLogsInState", chatData);
-                });
-              });
-            });
-          });
-        }
-      });
     }
   }
 };

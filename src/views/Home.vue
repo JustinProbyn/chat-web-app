@@ -30,9 +30,11 @@
         Day mode
       </button>
     </div>
+    {{ testNum }}
     <div class="main_panel">
-      <div class="sidebar"></div>
-      <div class="chatbox">
+      <div v-if="getChatLogs.length <= 0" class="lds-circle"><div></div></div>
+      <div v-if="getChatLogs.length > 0" class="sidebar"></div>
+      <div v-if="getChatLogs.length > 0" class="chatbox">
         <div class="user_image"></div>
         <div
           v-for="(data, i) in orderChatsByDate"
@@ -40,7 +42,14 @@
           class="text_display"
         >
           <div class="user-icon">
-            <img src="../../public/img/account-box-outline.png" />
+            <img
+              v-if="getTheme"
+              src="../../public/img/account-box-outline.png"
+            />
+            <img
+              v-if="!getTheme"
+              src="../../public/img/account-box-outline-dark.png"
+            />
           </div>
           <div class="user-info-and-chat">
             <div class="name-and-date">
@@ -54,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="text_input">
+        <div :class="getTheme ? 'text_input-night' : 'text_input-day'">
           <button
             :disabled="chatTyping ? false : true"
             @click="submit"
@@ -73,6 +82,7 @@
 // @ is an alias to /src
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
+import firebase from "firebase";
 export default {
   components: {
     signin: SignIn,
@@ -80,6 +90,7 @@ export default {
   },
   data() {
     return {
+      testNum: 1,
       moment: require("moment"),
       // modal
       signinDisplay: false,
@@ -121,12 +132,35 @@ export default {
       return datesOrdered.reverse();
     }
   },
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        const fireStoreRef = firebase.firestore().collection("userdata");
+        fireStoreRef.onSnapshot((snapShot) => {
+          snapShot.forEach((doc) => {
+            const userEmail = doc.data().email;
+            const fireStoreRef = firebase
+              .firestore()
+              .collection("userdata")
+              .doc(userEmail)
+              .collection("chatLogs");
+            fireStoreRef.get().then((snapShot) => {
+              snapShot.forEach((doc) => {
+                const chatData = doc.data().userChatData;
+                this.$store.dispatch("storeChatLogsInState", chatData);
+              });
+            });
+          });
+        });
+      }
+    });
+  },
   methods: {
     reloadPage() {
       this.reload++;
     },
     test() {
-      this.reload++;
+      this.testNum++;
     },
     // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
     nightMode() {
@@ -145,7 +179,7 @@ export default {
       };
       this.$store.dispatch("addUserChatToFireStore", userChatData);
       this.$store.dispatch("storeChatLogsInState", userChatData);
-      console.log(this.chatData);
+
       this.chatTyping = "";
     },
     // Displays signin/signup modals

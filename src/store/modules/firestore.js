@@ -65,7 +65,6 @@ const firestore = {
     /********************/
     // Adds each chat message of a specific user to their user profile on Firestore
     async addUserChatToFireStore(state, userChatData) {
-      console.log(userChatData);
       const user = await firebase.auth().currentUser;
       const fireStoreRef = await firebase
         .firestore()
@@ -75,6 +74,13 @@ const firestore = {
       fireStoreRef.add({
         userChatData
       });
+      // .then(() => {
+      //   fireStoreRef.onSnapshot((snap) => {
+      //     snap.docs.forEach((chatData) => {
+      //       commit("storeChatLogsInState", chatData.data().userChatData);
+      //     });
+      //   });
+      // });
     }
   }
 };
