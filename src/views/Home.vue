@@ -39,12 +39,20 @@
           :key="i"
           class="text_display"
         >
-          <div class="text_display-username">
-            <strong>{{ data.username }}:</strong>
+          <div class="user-icon">
+            <img src="../../public/img/account-box-outline.png" />
           </div>
-          <br />
-          <div class="text_display-chat">{{ data.chat }}</div>
-          <div class="text_display-date">on {{ data.date }}</div>
+          <div class="user-info-and-chat">
+            <div class="name-and-date">
+              <div class="text_display-username">
+                <strong>{{ data.username }}</strong>
+                <div class="text_display-date">({{ data.date }})</div>
+              </div>
+            </div>
+            <div class="chat-text">
+              <div class="text_display-chat">{{ data.chat }}</div>
+            </div>
+          </div>
         </div>
         <div class="text_input">
           <button
@@ -54,7 +62,7 @@
           >
             Submit
           </button>
-          <input v-model="chatTyping" type="text" class="text_input-bar" />
+          <textarea v-model="chatTyping" type="text" class="text_input-bar" />
         </div>
       </div>
     </div>
@@ -72,6 +80,7 @@ export default {
   },
   data() {
     return {
+      moment: require("moment"),
       // modal
       signinDisplay: false,
       signupDisplay: false,
