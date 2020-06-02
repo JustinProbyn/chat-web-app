@@ -7,6 +7,7 @@ import firebase from "firebase";
 import Vuelidate from "vuelidate";
 
 Vue.use(Vuelidate);
+Vue.use(require("vue-moment"));
 
 Vue.config.productionTip = false;
 
@@ -31,6 +32,7 @@ new Vue({
       if (firebaseUser) {
         console.log(`${firebaseUser.email} is signed in.`);
         this.$store.dispatch("storeUserEmail", firebaseUser.email);
+        this.$store.dispatch("loadProfilePicture", firebaseUser.email);
       }
     });
   },

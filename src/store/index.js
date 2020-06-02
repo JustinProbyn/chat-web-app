@@ -10,10 +10,11 @@ export default new Vuex.Store({
     nightMode: false,
     currentUserEmail: "",
     currentUserName: "",
+    profilePicture: "",
     chatLogs: []
   },
   mutations: {
-    /******Username mutations**********/
+    /******User mutations**********/
     storeCurrentUserEmail(state, email) {
       state.currentUserEmail = email;
     },
@@ -23,11 +24,16 @@ export default new Vuex.Store({
     removeUserName(state) {
       state.currentUserName = "";
     },
+    setpProfilePicture(state, url) {
+      state.profilePicture = url;
+    },
     /********Chat mutations**********/
     storeChatLogsInState(state, chatLogs) {
       state.chatLogs.push(chatLogs);
     },
-
+    clearLogs(state) {
+      state.chatLogs = [];
+    },
     /********Theme mutations**********/
     setNightMode(state) {
       localStorage.setItem("nightmode", "nightmode");
@@ -40,6 +46,9 @@ export default new Vuex.Store({
   },
   actions: {
     /********Chat Actions**********/
+    clearChatLogs({ commit }) {
+      commit("clearLogs");
+    },
     storeChatLogsInState({ commit }, chatLogs) {
       commit("storeChatLogsInState", chatLogs);
     },
@@ -62,6 +71,9 @@ export default new Vuex.Store({
     },
     getChatLogs(state) {
       return state.chatLogs;
+    },
+    getProfilePicture(state) {
+      return state.profilePicture;
     }
   },
   modules: {

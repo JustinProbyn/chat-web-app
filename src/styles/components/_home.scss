@@ -79,32 +79,33 @@
   width: 100%;
   padding: 20px;
   align-items: center;
-  .user-icon {
-    margin-top: 2px;
-  }
 }
 
 .text_display {
   display: flex;
   flex-direction: row;
-  height: 80%;
+  height: auto;
   width: 100%;
   padding: 20px;
-  align-items: flex-start;
-  .user-info-and-chat {
-    align-self: center;
-  }
+  justify-content: flex-start;
 
+  .user_icon-img,
+  .user_icon {
+    height: 40px;
+    width: 40px;
+  }
   .chat-text {
     display: flex;
+    margin-left: 8px;
+    margin-top: 5px;
   }
-  //
+
   .name-and-date {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flexCenter;
     .text_display-username {
       display: flex;
+      margin-right: 5px;
+      margin-left: 8px;
     }
     .text_display-date {
       color: rgb(255, 136, 0);
@@ -112,14 +113,18 @@
     .user-icon {
       margin-top: 2px;
     }
+    .user-info-and-chat {
+      display: flex;
+      justify-self: flex-start;
+      justify-content: center;
+      align-items: center;
+    }
   }
   //
 }
 
 .text_input-night {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flexCenter;
   width: 80%;
   position: absolute;
   margin-top: 741px;
@@ -127,9 +132,7 @@
 }
 
 .text_input-day {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flexCenter;
   width: 80%;
   position: absolute;
   margin-top: 741px;
@@ -153,8 +156,11 @@
 
 /**********************/
 /***AUTH MODALS***********/
-
+// Styling in separate scss files
 .authModals {
+  z-index: 99;
+  display: flex;
+  justify-content: center;
 }
 
 #signin-modal {
@@ -163,6 +169,11 @@
 }
 
 #signup-modal {
+  display: none;
+  position: absolute;
+}
+
+#profile-modal {
   display: none;
   position: absolute;
 }

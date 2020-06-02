@@ -67,14 +67,13 @@ export default {
   methods: {
     /* checks if validation errors then signs into firebase */
     submit() {
-      this.$emit("signedIn");
       this.$v.$touch();
       const userData = {
         email: this.email,
         password: this.password
       };
       this.$store.dispatch("firestoreSignIn", userData);
-      this.$forceUpdate;
+      this.$emit("signedIn");
     }
   }
 };

@@ -21,7 +21,7 @@ const onReload = {
         commit("storeUsername", username);
       }
 
-      /**** fetches chat logs from firestore ****/
+      /**** fetches profile pictures firestore ****/
     }
   }
 };

@@ -57,9 +57,58 @@ const firestore = {
         .catch(function(er) {
           console.log(er);
         });
-      localStorage.removeItem("nightmode");
       localStorage.removeItem("username");
       commit("removeUserName");
+    },
+
+    // Change user profile pic
+    // Uploads image to Firestore storage
+    submitPicture({ dispatch }, imageData) {
+      console.log(imageData);
+      const storageRef = firebase.storage().ref();
+      const imageRef = storageRef.child("profileImages/" + imageData.name);
+
+      imageRef.put(imageData).then(() => {
+        imageRef
+          .getDownloadURL()
+          .then((url) => {
+            dispatch("storePictureData", url);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
+    },
+    // Stores picture details on Firestore under userData
+    storePictureData({ dispatch }, url) {
+      const user = firebase.auth().currentUser;
+      const fireStoreRef = firebase
+        .firestore()
+        .collection("userdata")
+        .doc(user.email);
+      fireStoreRef
+        .update({
+          profilePicture: url
+        })
+        .then(function() {
+          dispatch("loadProfilePicture");
+          console.log("Profile picture successfully updated!");
+        })
+        .catch(function(error) {
+          console.error("Error adding picture: ", error);
+        });
+    },
+    // Action also dispatched in 'onReload'
+    async loadProfilePicture({ commit }) {
+      const user = firebase.auth().currentUser;
+      console.log(user);
+      const picture = await firebase
+        .firestore()
+        .collection("userdata")
+        .doc(user.email)
+        .get();
+
+      commit("setpProfilePicture", picture.data().profilePicture);
     },
 
     /********************/
@@ -74,13 +123,33 @@ const firestore = {
       fireStoreRef.add({
         userChatData
       });
-      // .then(() => {
-      //   fireStoreRef.onSnapshot((snap) => {
-      //     snap.docs.forEach((chatData) => {
-      //       commit("storeChatLogsInState", chatData.data().userChatData);
-      //     });
-      //   });
-      // });
+    },
+
+    // Loads chat logs from Firestore on page load and refresh
+    loadChatLogs() {
+      let chatData = [];
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user && this.getChatLogs != []) {
+          const fireStoreRef = firebase.firestore().collection("userdata");
+          fireStoreRef.onSnapshot((snapShot) => {
+            snapShot.forEach((doc) => {
+              const userEmail = doc.data().email;
+              const fireStoreRef = firebase
+                .firestore()
+                .collection("userdata")
+                .doc(userEmail)
+                .collection("chatLogs");
+              fireStoreRef.get().then((snapShot) => {
+                snapShot.forEach((doc) => {
+                  chatData.push(doc.data().userChatData);
+                });
+              });
+            });
+          });
+          this.$store.dispatch("storeChatLogsInState", chatData);
+          console.log(chatData);
+        }
+      });
     }
   }
 };

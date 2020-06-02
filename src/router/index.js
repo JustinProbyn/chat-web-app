@@ -11,6 +11,14 @@ const routes = [
     component: Home
   },
   {
+    path: "/profile",
+    name: "Profile",
+    component: () =>
+      import(
+        /* webpackChunkName: "ProfilePage" */ "../components/ProfilePage.vue"
+      )
+  },
+  {
     path: "/signin",
     name: "SignIn",
     component: () =>
