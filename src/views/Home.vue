@@ -1,55 +1,44 @@
 <template class="home">
-  <div
-    @keyup.enter="submit"
-    class="home_container"
-    :class="getTheme ? 'nightmode' : 'daymode'"
-  >
-    <!-- USER BUTTONS -->
-    <div class="user_buttons">
-      <button v-if="!getCurrentUserName" @click="displaySignUp">
-        Sign up
-      </button>
-      <button v-if="!getCurrentUserName" @click="displaySignIn">
-        Sign in
-      </button>
-      <button v-if="getCurrentUserName" @click="signOut">Sign out</button>
-      <button v-if="getCurrentUserName" @click="displayProfile">
-        Profile
-      </button>
-    </div>
-    <!-- MODALS -->
-    <div class="authModals">
-      <div v-if="!getCurrentUserName" id="signin-modal">
-        <signin @signedIn="reload"></signin>
+  <div @keyup.enter="submit" class="home_container" :class="getTheme ? 'nightmode' : 'daymode'">
+    <div id="main_panel" @keyup.enter="submit">
+      <div v-if="getChatLogs.length <= 0" class="lds-circle"></div>
+      <!--  -->
+      <div
+        v-if="!getCurrentUserName && getChatLogs.length <= 0 || getCurrentUserName"
+        class="sidebar"
+      >
+        <!-- THEME BUTTONS -->
+        <div class="mode_buttons">
+          <button v-if="!getTheme" @click="nightMode" class="mode_button">Night mode</button>
+          <button v-if="getTheme" @click="dayMode" class="mode_button">Day mode</button>
+        </div>
+        <!--  -->
+        <!-- USER BUTTONS -->
+        <div class="user_buttons">
+          <button class="user_button" v-if="!getCurrentUserName" @click="displaySignUp">Sign up</button>
+          <button class="user_button" v-if="!getCurrentUserName" @click="displaySignIn">Sign in</button>
+          <button class="user_button" v-if="getCurrentUserName" @click="displayProfile">Profile</button>
+          <button class="user_button" v-if="getCurrentUserName" @click="signOut">Sign out</button>
+        </div>
+        <!-- MODALS -->
+        <div class="authModals">
+          <div v-if="!getCurrentUserName" id="signin-modal">
+            <signin @signedIn="reload"></signin>
+          </div>
+          <div v-if="!getCurrentUserName" id="signup-modal">
+            <signup></signup>
+          </div>
+          <div id="profile-modal">
+            <profile-page></profile-page>
+          </div>
+        </div>
+        <!--  -->
+        <div class="channels">CHANNELS</div>
       </div>
-      <div v-if="!getCurrentUserName" id="signup-modal">
-        <signup></signup>
-      </div>
-      <div v-if="getCurrentUserName" id="profile-modal">
-        <profile-page></profile-page>
-      </div>
-    </div>
-    <!--  -->
-    <!-- THEME BUTTONS -->
-    <div class="mode_buttons">
-      <button v-if="!getTheme" @click="nightMode" class="mode_button">
-        Night mode
-      </button>
-      <button v-if="getTheme" @click="dayMode" class="mode_button">
-        Day mode
-      </button>
-    </div>
-    <!--  -->
-    <div class="main_panel" @keyup.enter="submit">
-      <div v-if="getChatLogs.length <= 0" class="lds-circle"><div></div></div>
-      <div v-if="getChatLogs.length > 0" class="sidebar"></div>
-      <div v-if="getChatLogs.length > 0" class="chatbox">
+      <!-- CHATBOX -->
+      <div v-if="getChatLogs.length > 0" id="chatbox">
         <div class="user_image"></div>
-        <div
-          v-for="(data, i) in orderChatsByDate"
-          :key="i"
-          class="text_display"
-        >
+        <div v-for="(data, i) in orderChatsByDate" :key="i" class="text_display">
           <div class="user_icon">
             <img
               class="user_icon-img"
@@ -67,30 +56,23 @@
               <div class="text_display-username">
                 <strong>{{ data.username }}&nbsp;</strong>
               </div>
-              <div class="text_display-date">
-                &nbsp; &nbsp;({{ data.date | moment("from", "now") }})
-              </div>
+              <div class="text_display-date">&nbsp; &nbsp;({{ data.date | moment("from", "now") }})</div>
             </div>
             <div class="chat-text">
               <div class="text_display-chat">{{ data.chat }}</div>
             </div>
           </div>
         </div>
-        <div :class="getTheme ? 'text_input-night' : 'text_input-day'">
+      </div>
+      <div class="text_input">
+        <div>
           <button
             v-if="chatTyping != ''"
-            :disabled="chatLogs ? true : false"
+            :disabled="getChatLogs ? true : false"
             @click="submit"
             class="text_input-button"
-          >
-            Submit
-          </button>
-          <textarea
-            placeholder="Say hi..."
-            v-model="chatTyping"
-            type="text"
-            class="text_input-bar"
-          />
+          >Submit</button>
+          <textarea placeholder="Say hi..." v-model="chatTyping" type="text" />
         </div>
       </div>
     </div>
@@ -140,14 +122,14 @@ export default {
     orderChatsByDate() {
       const timesOrdered = [];
       const datesOrdered = [];
-      this.getChatLogs.forEach((el) => {
+      this.getChatLogs.forEach(el => {
         timesOrdered.push(el.dateMilSec);
         timesOrdered.sort(function(a, b) {
           return a - b;
         });
       });
-      timesOrdered.forEach((timeSec) => {
-        this.getChatLogs.forEach((time) => {
+      timesOrdered.forEach(timeSec => {
+        this.getChatLogs.forEach(time => {
           if (timeSec == time.dateMilSec) {
             datesOrdered.unshift(time);
           }
@@ -157,19 +139,19 @@ export default {
     }
   },
   created() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const fireStoreRef = firebase.firestore().collection("userdata");
-        fireStoreRef.onSnapshot((snapShot) => {
-          snapShot.forEach((doc) => {
+        fireStoreRef.onSnapshot(snapShot => {
+          snapShot.forEach(doc => {
             const userEmail = doc.data().email;
             const fireStoreRef = firebase
               .firestore()
               .collection("userdata")
               .doc(userEmail)
               .collection("chatLogs");
-            fireStoreRef.get().then((snapShot) => {
-              snapShot.forEach((doc) => {
+            fireStoreRef.get().then(snapShot => {
+              snapShot.forEach(doc => {
                 this.$store.dispatch(
                   "storeChatLogsInState",
                   doc.data().userChatData
@@ -202,18 +184,21 @@ export default {
       if (this.chatTyping == "") {
         return;
       } else {
+        var dateobj = new Date();
+        var date = dateobj.toISOString();
         const userChatData = {
           chat: this.chatTyping,
           username: this.getCurrentUserName,
-          date: Date(),
+          date: date,
           dateMilSec: new Date().getTime(),
           profilePicture: this.getProfilePicture
         };
         this.$store.dispatch("addUserChatToFireStore", userChatData);
         this.$store.dispatch("storeChatLogsInState", userChatData);
-
         this.chatTyping = "";
       }
+      var element = document.getElementById("chatbox");
+      element.scrollTop = element.scrollHeight;
     },
     // Displays signin/signup modals
     displaySignIn() {

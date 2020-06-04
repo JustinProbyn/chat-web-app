@@ -3,13 +3,13 @@
 
 .home_container {
   height: 100vh;
-  margin-top: 15px;
 }
 
-.main_panel {
+#main_panel {
+  position: relative;
   @include flexCenter();
   flex-direction: row;
-  height: 92vh;
+  height: 98vh;
   justify-self: center;
   overflow: hidden;
 }
@@ -21,9 +21,11 @@
   background: rgb(2, 26, 32);
   height: 100%;
   color: #fff;
-  .sidebar {
-  }
-  .chatbox {
+  .mode_button,
+  .user_button {
+    color: #fff;
+    border: 0px;
+    border-radius: 2px;
   }
 }
 
@@ -31,16 +33,16 @@
   background: #fff;
   height: 100%;
   color: #000;
-  .sidebar {
-  }
-  .chatbox {
-  }
-}
-
-.mode_button {
-  background: $primaryBtn;
-  &:hover {
-    background: red;
+  .mode_button,
+  .user_button {
+    text-decoration: none;
+    color: #000;
+    border: 0px;
+    border-radius: 2px;
+    &:hover {
+      background: $primaryBtn;
+      color: #fff;
+    }
   }
 }
 
@@ -48,25 +50,74 @@
 /***SIDEBAR***********/
 
 .sidebar {
+  position: absolute;
+  right: 79%;
+}
+.channels {
+  @include flexCenter();
+  margin-left: 5%;
+  width: 90%;
+  height: 80%;
+  margin-top: 25px;
+  border: 1px solid #fff;
+}
+
+.mode_button {
+  outline: none;
+  font-size: 120%;
+  width: 100%;
+  margin: 10px 0px;
+  background: rgba(255, 255, 255, 0);
+  &:hover {
+    background: $primaryBtn;
+  }
+}
+
+.user_buttons {
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  .user_button {
+    outline: none;
+    font-size: 120%;
+    width: 100%;
+    margin: 10px 0px;
+    background: rgba(255, 255, 255, 0);
+    &:hover {
+      background: $primaryBtn;
+    }
+  }
+}
+
+.daymode .sidebar {
   width: 20%;
-  height: 100%;
+  height: 95%;
+  border: 1px solid #000;
+  margin-left: 10px;
+}
+.nightmode .sidebar {
+  width: 20%;
+  height: 95%;
+  border: 1px solid #fff;
+  margin-left: 10px;
 }
 
 /**********************/
 /***CHATBOX***********/
-
-.chatbox {
+#chatbox {
+  position: absolute;
   width: 100%;
-  height: 85%;
+  height: 87%;
   display: flex;
   flex-direction: column;
-  align-self: flex-start;
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  left: 22%;
+  top: 3%;
 }
 
-.chatbox::-webkit-scrollbar {
+#chatbox::-webkit-scrollbar {
   /* WebKit */
   width: 0;
   height: 0;
@@ -86,7 +137,8 @@
   flex-direction: row;
   height: auto;
   width: 100%;
-  padding: 20px;
+  margin-bottom: 40px;
+
   justify-content: flex-start;
 
   .user_icon-img,
@@ -123,34 +175,24 @@
   //
 }
 
-.text_input-night {
-  @include flexCenter;
-  width: 80%;
+.text_input {
   position: absolute;
-  margin-top: 741px;
-  border: 24px solid rgb(2, 26, 32);
+  left: 22%;
+  bottom: 2%;
+  width: 74%;
 }
 
-.text_input-day {
-  @include flexCenter;
-  width: 80%;
-  position: absolute;
-  margin-top: 741px;
-  border: 24px solid rgb(255, 255, 255);
-}
-
-.text_input-bar {
+textarea {
+  outline: none;
   width: 100%;
-  height: 67px;
-  border-radius: 4px;
-  text-align: top;
+  padding: 20px;
+  height: 40px;
+  border-radius: 6px;
   font-size: 140%;
   resize: none;
 }
 
 .text_input-button {
-  height: 20px;
-  margin-right: 10px;
   display: none;
 }
 
@@ -181,10 +223,10 @@
 // Loader
 
 .lds-circle {
-  display: inline-block;
+  z-index: 999;
+  position: absolute;
+  left: 58%;
   transform: translateZ(1px);
-}
-.lds-circle > div {
   display: inline-block;
   width: 64px;
   height: 64px;
@@ -193,6 +235,7 @@
   background: #fff;
   animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
+
 @keyframes lds-circle {
   0%,
   100% {
