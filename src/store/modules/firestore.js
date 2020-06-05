@@ -98,10 +98,10 @@ const firestore = {
           console.error("Error adding picture: ", error);
         });
     },
+    // Loads profile picture
     // Action also dispatched in 'onReload'
     async loadProfilePicture({ commit }) {
       const user = firebase.auth().currentUser;
-      console.log(user);
       const picture = await firebase
         .firestore()
         .collection("userdata")
@@ -111,11 +111,31 @@ const firestore = {
       commit("setpProfilePicture", picture.data().profilePicture);
     },
 
+    // Changes user's username
+
+    changeUsernameOnFirestore({ commit }, username) {
+      const user = firebase.auth().currentUser;
+      console.log(username);
+      const fireStoreRef = firebase
+        .firestore()
+        .collection("userdata")
+        .doc(user.email);
+      fireStoreRef
+        .update({
+          username: username
+        })
+        .catch(function(error) {
+          alert(error.message);
+        });
+      commit("storeUsername", username);
+      localStorage.setItem("username", username);
+    },
+
     /********************/
     // Adds each chat message of a specific user to their user profile on Firestore
-    async addUserChatToFireStore(state, userChatData) {
-      const user = await firebase.auth().currentUser;
-      const fireStoreRef = await firebase
+    addUserChatToFireStore(state, userChatData) {
+      const user = firebase.auth().currentUser;
+      const fireStoreRef = firebase
         .firestore()
         .collection("userdata")
         .doc(user.email)

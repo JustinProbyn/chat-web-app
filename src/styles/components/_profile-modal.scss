@@ -1,3 +1,30 @@
 #profile-modal {
   @include modal();
+  width: 95%;
+  height: 250px;
+  border-radius: 3px;
+  justify-self: center;
+  padding: 10px;
+}
+
+.profile-page {
+  @include flexCenter();
+  flex-direction: column;
+}
+
+.change-user-image {
+  margin-bottom: 20px;
+  @include flexCenter();
+  margin-top: 20px;
+  width: 100%;
+}
+
+.upload-button {
+  width: 50%;
+}
+
+.change-user-name {
+  position: absolute;
+  top: 80%;
+  left: 8%;
 }

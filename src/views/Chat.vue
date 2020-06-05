@@ -14,20 +14,12 @@
         </div>
         <!--  -->
         <!-- USER BUTTONS -->
-        <div class="user_buttons">
-          <button class="user_button" v-if="!getCurrentUserName" @click="displaySignUp">Sign up</button>
-          <button class="user_button" v-if="!getCurrentUserName" @click="displaySignIn">Sign in</button>
-          <button class="user_button" v-if="getCurrentUserName" @click="displayProfile">Profile</button>
-          <button class="user_button" v-if="getCurrentUserName" @click="signOut">Sign out</button>
+        <div class="sidebar_buttons">
+          <button class="sidebar_button" v-if="getCurrentUserName" @click="displayProfile">Profile</button>
+          <button class="sidebar_button" v-if="getCurrentUserName" @click="signOut">Sign out</button>
         </div>
         <!-- MODALS -->
         <div class="authModals">
-          <div v-if="!getCurrentUserName" id="signin-modal">
-            <signin @signedIn="reload"></signin>
-          </div>
-          <div v-if="!getCurrentUserName" id="signup-modal">
-            <signup></signup>
-          </div>
           <div id="profile-modal">
             <profile-page></profile-page>
           </div>
@@ -54,7 +46,7 @@
           <div class="user-info-and-chat">
             <div class="name-and-date">
               <div class="text_display-username">
-                <strong>{{ data.username }}&nbsp;</strong>
+                <strong>{{ getCurrentUserName }}&nbsp;</strong>
               </div>
               <div class="text_display-date">&nbsp; &nbsp;({{ data.date | moment("from", "now") }})</div>
             </div>
@@ -81,14 +73,11 @@
 
 <script>
 // @ is an alias to /src
-import SignIn from "../components/SignIn";
-import SignUp from "../components/SignUp";
+
 import ProfilePage from "../components/ProfilePage";
 import firebase from "firebase";
 export default {
   components: {
-    signin: SignIn,
-    signup: SignUp,
     profilePage: ProfilePage
   },
   data() {
@@ -201,32 +190,7 @@ export default {
       element.scrollTop = element.scrollHeight;
     },
     // Displays signin/signup modals
-    displaySignIn() {
-      const signinModal = document.getElementById("signin-modal");
-      const signupModal = document.getElementById("signup-modal");
-      signupModal.style.display = "none";
-      this.signupDisplay = false;
-      if (this.signinDisplay == true) {
-        signinModal.style.display = "none";
-        this.signinDisplay = false;
-      } else if (this.signinDisplay == false) {
-        signinModal.style.display = "block";
-        this.signinDisplay = true;
-      }
-    },
-    displaySignUp() {
-      const signupModal = document.getElementById("signup-modal");
-      const signinModal = document.getElementById("signin-modal");
-      this.signinDisplay = false;
-      signinModal.style.display = "none";
-      if (this.signupDisplay == true) {
-        signupModal.style.display = "none";
-        this.signupDisplay = false;
-      } else if (this.signupDisplay == false) {
-        signupModal.style.display = "block";
-        this.signupDisplay = true;
-      }
-    },
+
     displayProfile() {
       const profileModal = document.getElementById("profile-modal");
       if (this.profileDisplay == true) {
@@ -240,9 +204,8 @@ export default {
     signOut() {
       this.$store.dispatch("firestoreSignOut"); //Action in firestore.js module
       this.$store.dispatch("clearChatLogs");
-      setTimeout(() => {
-        this.$router.go(0);
-      }, 500);
+
+      this.$router.push("/");
     }
   }
 };

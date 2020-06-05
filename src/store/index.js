@@ -28,7 +28,13 @@ export default new Vuex.Store({
       state.profilePicture = url;
     },
     /********Chat mutations**********/
-    storeChatLogsInState(state, chatLogs) {
+    storeChatLogsInState(state, chatData) {
+      const chatLogs = {
+        chat: chatData.chat,
+        date: chatData.date,
+        dateMilSec: chatData.dateMilSec,
+        profilePicture: chatData.profilePicture
+      };
       state.chatLogs.push(chatLogs);
     },
     clearLogs(state) {

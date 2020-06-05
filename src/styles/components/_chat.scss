@@ -22,7 +22,7 @@
   height: 100%;
   color: #fff;
   .mode_button,
-  .user_button {
+  .sidebar_button {
     color: #fff;
     border: 0px;
     border-radius: 2px;
@@ -34,7 +34,7 @@
   height: 100%;
   color: #000;
   .mode_button,
-  .user_button {
+  .sidebar_button {
     text-decoration: none;
     color: #000;
     border: 0px;
@@ -73,11 +73,11 @@
   }
 }
 
-.user_buttons {
+.sidebar_buttons {
   outline: none;
   display: flex;
   flex-direction: column;
-  .user_button {
+  .sidebar_button {
     outline: none;
     font-size: 120%;
     width: 100%;
@@ -203,21 +203,6 @@ textarea {
   z-index: 99;
   display: flex;
   justify-content: center;
-}
-
-#signin-modal {
-  display: none;
-  position: absolute;
-}
-
-#signup-modal {
-  display: none;
-  position: absolute;
-}
-
-#profile-modal {
-  display: none;
-  position: absolute;
 }
 
 // Loader

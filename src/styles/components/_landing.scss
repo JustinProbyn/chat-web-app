@@ -1,0 +1,14 @@
+.landing_container {
+  @include flexCenter();
+  flex-direction: column;
+}
+
+.auth_buttons {
+  @include flexCenter();
+}
+
+.auth-modals {
+  @include flexCenter();
+  height: 200px;
+  width: 100%;
+}
