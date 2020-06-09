@@ -1,18 +1,20 @@
 <template>
   <div class="landing_container">
-    <div class="landing-header-and-buttons">
-      <h1>Please sign in to begin chatting!</h1>
-      <div class="auth_buttons">
-        <button class="auth_button" v-if="!getCurrentUserName" @click="displaySignUp">Sign up</button>
-        <button class="auth_button" v-if="!getCurrentUserName" @click="displaySignIn">Sign in</button>
+    <div class="landing_elements">
+      <div class="landing-header-and-buttons">
+        <h1>Please sign in to begin chatting!</h1>
+        <div class="auth_buttons">
+          <button class="auth_button" v-if="!getCurrentUserName" @click="displaySignUp">Sign up</button>
+          <button class="auth_button" v-if="!getCurrentUserName" @click="displaySignIn">Sign in</button>
+        </div>
       </div>
-    </div>
-    <div class="auth-modals">
-      <div v-if="!getCurrentUserName" id="signin-modal">
-        <signin @signedIn="goToChat"></signin>
-      </div>
-      <div v-if="!getCurrentUserName" id="signup-modal">
-        <signup></signup>
+      <div class="auth-modals">
+        <div v-if="!getCurrentUserName" id="signin-modal">
+          <signin @signedIn="goToChat"></signin>
+        </div>
+        <div v-if="!getCurrentUserName" id="signup-modal">
+          <signup></signup>
+        </div>
       </div>
     </div>
   </div>

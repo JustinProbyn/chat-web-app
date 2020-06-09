@@ -30,6 +30,7 @@ export default new Vuex.Store({
     /********Chat mutations**********/
     storeChatLogsInState(state, chatData) {
       const chatLogs = {
+        username: chatData.username,
         chat: chatData.chat,
         date: chatData.date,
         dateMilSec: chatData.dateMilSec,

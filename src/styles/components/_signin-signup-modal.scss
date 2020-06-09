@@ -1,0 +1,33 @@
+#signin-modal {
+  @include modal();
+  padding: 30px;
+  border-radius: 5px;
+}
+
+#signup-modal {
+  @include modal();
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  input {
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+.auth-submit button {
+  border-radius: 3px;
+  width: 100%;
+  height: 40px;
+  cursor: pointer;
+
+  &:hover {
+    background: $primaryBtn;
+    color: #fff;
+  }
+}

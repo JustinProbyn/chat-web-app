@@ -2,41 +2,42 @@
   <div class="form" @keyup.enter="submit">
     <h2 class="display-1">Sign Up</h2>
     <div class="inputs">
-      <label>Username</label>
       <input
+        placeholder="Username"
         type="text"
         v-model="username"
         :error-messages="nameErrors"
         @input="$v.username.$touch()"
         @blur="$v.username.$touch()"
       />
-      <label>Email</label>
+
       <input
+        placeholder="Email"
         type="text"
         v-model="email"
         :error-messages="emailErrors"
         @input="$v.email.$touch()"
         @blur="$v.email.$touch()"
       />
-      <label>Password</label>
+
       <input
-        type="text"
+        placeholder="Password"
+        type="password"
         v-model="password"
         :error-messages="passwordErrors"
         @input="$v.password.$touch()"
       />
-      <label>Confirm Password</label>
+
       <input
-        type="text"
+        placeholder="Confirm Password"
+        :type="password"
         v-model="confirmPassword"
         :error-messages="confirmPasswordErrors"
         @input="$v.confirmPassword.$touch()"
         @blur="$v.confirmPassword.$touch()"
       />
-      <div class="btns">
-        <button :disabled="$v.$invalid" @click="submit">
-          Submit
-        </button>
+      <div class="auth-submit">
+        <button :disabled="$v.$invalid" @click="submit">Submit</button>
       </div>
     </div>
   </div>
@@ -71,7 +72,6 @@ export default {
 
   data() {
     return {
-      showPassword: false,
       username: "",
       email: "",
       password: "",

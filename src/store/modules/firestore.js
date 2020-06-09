@@ -143,33 +143,6 @@ const firestore = {
       fireStoreRef.add({
         userChatData
       });
-    },
-
-    // Loads chat logs from Firestore on page load and refresh
-    loadChatLogs() {
-      let chatData = [];
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user && this.getChatLogs != []) {
-          const fireStoreRef = firebase.firestore().collection("userdata");
-          fireStoreRef.onSnapshot((snapShot) => {
-            snapShot.forEach((doc) => {
-              const userEmail = doc.data().email;
-              const fireStoreRef = firebase
-                .firestore()
-                .collection("userdata")
-                .doc(userEmail)
-                .collection("chatLogs");
-              fireStoreRef.get().then((snapShot) => {
-                snapShot.forEach((doc) => {
-                  chatData.push(doc.data().userChatData);
-                });
-              });
-            });
-          });
-          this.$store.dispatch("storeChatLogsInState", chatData);
-          console.log(chatData);
-        }
-      });
     }
   }
 };

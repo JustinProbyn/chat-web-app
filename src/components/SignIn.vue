@@ -3,6 +3,7 @@
     <h2 class="display-1">Sign In</h2>
     <div class="inputs">
       <input
+        placeholder="Email"
         type="text"
         v-model="email"
         :error-messages="emailErrors"
@@ -10,13 +11,14 @@
         @blur="$v.email.$touch()"
       />
       <input
-        type="text"
+        placeholder="Password"
+        type="password"
         v-model="password"
         :error-messages="passwordErrors"
         @input="$v.password.$touch()"
         @blur="$v.password.$touch()"
       />
-      <div class="btns">
+      <div class="auth-submit">
         <button :disabled="$v.$invalid" @click="submit">submit</button>
         <!-- <v-btn color="info" @click="goToSignUp">Register</v-btn> -->
       </div>

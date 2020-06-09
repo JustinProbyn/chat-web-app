@@ -5,8 +5,8 @@
 }
 
 @mixin modal() {
+  margin-top: 100px;
   display: none;
   position: absolute;
   background: rgb(223, 220, 220);
-  margin-top: 50px;
 }

@@ -46,7 +46,7 @@
           <div class="user-info-and-chat">
             <div class="name-and-date">
               <div class="text_display-username">
-                <strong>{{ getCurrentUserName }}&nbsp;</strong>
+                <strong>{{ data.username }}&nbsp;</strong>
               </div>
               <div class="text_display-date">&nbsp; &nbsp;({{ data.date | moment("from", "now") }})</div>
             </div>

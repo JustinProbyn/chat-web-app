@@ -1,10 +1,39 @@
 .landing_container {
-  @include flexCenter();
+  display: flex;
+  align-items: center;
   flex-direction: column;
+  height: 98vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)),
+    url("../public/img/person-chatting.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  h1 {
+    color: rgb(233, 233, 233);
+  }
+}
+
+.landing_elements {
+  margin-top: 100px;
 }
 
 .auth_buttons {
   @include flexCenter();
+  justify-content: space-evenly;
+
+  .auth_button {
+    cursor: pointer;
+    border: none;
+    &:hover {
+      background: $primaryBtn;
+      color: #fff;
+    }
+
+    padding: 10px;
+    font-size: 110%;
+    width: 40%;
+    border-radius: 4px;
+  }
 }
 
 .auth-modals {
