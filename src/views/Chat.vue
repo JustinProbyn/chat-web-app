@@ -153,14 +153,6 @@ export default {
     });
   },
   methods: {
-    test() {
-      this.$router.go(0);
-    },
-    reload() {
-      if (this.getCurrentUserName) {
-        this.$router.go(0);
-      }
-    },
     // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
     nightMode() {
       this.$store.dispatch("nightMode");

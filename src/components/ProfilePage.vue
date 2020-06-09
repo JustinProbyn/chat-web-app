@@ -43,7 +43,6 @@ export default {
     },
     changeUsername() {
       this.$store.dispatch("changeUsernameOnFirestore", this.newUsername);
-      // this.$router.go(0);
     }
   }
 };

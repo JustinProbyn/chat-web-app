@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import router from "../../router";
 
 const firestore = {
   state: {},
@@ -116,16 +117,33 @@ const firestore = {
     changeUsernameOnFirestore({ commit }, username) {
       const user = firebase.auth().currentUser;
       console.log(username);
-      const fireStoreRef = firebase
+      const fireStoreUsernameRef = firebase
         .firestore()
         .collection("userdata")
         .doc(user.email);
-      fireStoreRef
+      fireStoreUsernameRef
         .update({
           username: username
         })
         .catch(function(error) {
           alert(error.message);
+        })
+        .then(() => {
+          const fireStoreRef = firebase
+            .firestore()
+            .collection("userdata")
+            .doc(user.email)
+            .collection("chatLogs");
+
+          fireStoreRef.get().then((snapShot) => {
+            snapShot.forEach((doc) => {
+              console.log(doc.id, " => ", doc.data());
+              fireStoreRef
+                .doc(doc.id)
+                .update({ "userChatData.username": username });
+              router.go(0);
+            });
+          });
         });
       commit("storeUsername", username);
       localStorage.setItem("username", username);
