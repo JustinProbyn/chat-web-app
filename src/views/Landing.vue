@@ -23,6 +23,7 @@
 <script>
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
+import firebase from "firebase";
 export default {
   data() {
     return {
@@ -38,6 +39,13 @@ export default {
     getCurrentUserName() {
       return this.$store.getters.getCurrentUserName;
     }
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$router.push("chat");
+      }
+    });
   },
   methods: {
     goToChat() {

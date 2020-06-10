@@ -134,12 +134,15 @@ export default {
         fireStoreRef.onSnapshot(snapShot => {
           snapShot.forEach(doc => {
             const userEmail = doc.data().email;
-            const fireStoreRef = firebase
+            const fireStoreRef2 = firebase
               .firestore()
               .collection("userdata")
               .doc(userEmail)
               .collection("chatLogs");
-            fireStoreRef.get().then(snapShot => {
+            fireStoreRef2.onSnapshot(snapShot => {
+              console.log(snapShot);
+              // fireStoreRef.onSnapshot(snapShot => {
+              // logic here to add new messages and dispatch to stat
               snapShot.forEach(doc => {
                 this.$store.dispatch(
                   "storeChatLogsInState",
@@ -153,13 +156,6 @@ export default {
     });
   },
   methods: {
-    // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
-    nightMode() {
-      this.$store.dispatch("nightMode");
-    },
-    dayMode() {
-      this.$store.dispatch("dayMode");
-    },
     // store chatlogs in store
     submit() {
       if (this.chatTyping == "") {
@@ -181,6 +177,14 @@ export default {
       var element = document.getElementById("chatbox");
       element.scrollTop = element.scrollHeight;
     },
+    // sets website to nigtmode and daymode respecitvely, storing choice to maintain on reload
+    nightMode() {
+      this.$store.dispatch("nightMode");
+    },
+    dayMode() {
+      this.$store.dispatch("dayMode");
+    },
+
     // Displays signin/signup modals
 
     displayProfile() {
