@@ -11,6 +11,7 @@
         <div class="mode_buttons">
           <button v-if="!getTheme" @click="nightMode" class="mode_button">Night mode</button>
           <button v-if="getTheme" @click="dayMode" class="mode_button">Day mode</button>
+          <button @click="test">TESt</button>
         </div>
         <!--  -->
         <!-- USER BUTTONS -->
@@ -127,11 +128,13 @@ export default {
       return datesOrdered.reverse();
     }
   },
+  // Fetches all chat logs on page load. Also updates UI when new message added with onSnaphot.
   created() {
+    const chatLogs = [];
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const fireStoreRef = firebase.firestore().collection("userdata");
-        fireStoreRef.onSnapshot(snapShot => {
+        fireStoreRef.get().then(snapShot => {
           snapShot.forEach(doc => {
             const userEmail = doc.data().email;
             const fireStoreRef2 = firebase
@@ -140,22 +143,20 @@ export default {
               .doc(userEmail)
               .collection("chatLogs");
             fireStoreRef2.onSnapshot(snapShot => {
-              console.log(snapShot);
-              // fireStoreRef.onSnapshot(snapShot => {
-              // logic here to add new messages and dispatch to stat
-              snapShot.forEach(doc => {
-                this.$store.dispatch(
-                  "storeChatLogsInState",
-                  doc.data().userChatData
-                );
+              snapShot.forEach(doc2 => {
+                chatLogs.push(doc2.data().userChatData);
               });
             });
           });
         });
+        this.$store.dispatch("storeChatLogsInState", chatLogs);
       }
     });
   },
   methods: {
+    test() {
+      console.log(this.orderChatsByDate);
+    },
     // store chatlogs in store
     submit() {
       if (this.chatTyping == "") {
@@ -171,7 +172,7 @@ export default {
           profilePicture: this.getProfilePicture
         };
         this.$store.dispatch("addUserChatToFireStore", userChatData);
-        this.$store.dispatch("storeChatLogsInState", userChatData);
+        // this.$store.dispatch("storeChatLogsInState", userChatData);
         this.chatTyping = "";
       }
       var element = document.getElementById("chatbox");
