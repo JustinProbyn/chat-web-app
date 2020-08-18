@@ -11,7 +11,6 @@
         <div class="mode_buttons">
           <button v-if="!getTheme" @click="nightMode" class="mode_button">Night mode</button>
           <button v-if="getTheme" @click="dayMode" class="mode_button">Day mode</button>
-          <button @click="test">TESt</button>
         </div>
         <!--  -->
         <!-- USER BUTTONS -->
@@ -130,7 +129,8 @@ export default {
   },
   // Fetches all chat logs on page load. Also updates UI when new message added with onSnaphot.
   created() {
-    const chatLogs = [];
+    let chatLogs = [];
+    // this.$store.dispatch("clearChatLogs");
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const fireStoreRef = firebase.firestore().collection("userdata");
@@ -145,18 +145,16 @@ export default {
             fireStoreRef2.onSnapshot(snapShot => {
               snapShot.forEach(doc2 => {
                 chatLogs.push(doc2.data().userChatData);
+                this.$store.dispatch("storeChatLogsInState", chatLogs);
               });
+              chatLogs = [];
             });
           });
         });
-        this.$store.dispatch("storeChatLogsInState", chatLogs);
       }
     });
   },
   methods: {
-    test() {
-      console.log(this.orderChatsByDate);
-    },
     // store chatlogs in store
     submit() {
       if (this.chatTyping == "") {
