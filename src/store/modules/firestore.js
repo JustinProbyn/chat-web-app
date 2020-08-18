@@ -150,7 +150,7 @@ const firestore = {
     },
 
     /********************/
-    // Adds each chat message of a specific user to their user profile on Firestore
+    // Adds chat message of a specific user to their user profile on Firestore
     addUserChatToFireStore(state, userChatData) {
       const user = firebase.auth().currentUser;
       const fireStoreRef = firebase

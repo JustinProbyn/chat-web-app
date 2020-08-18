@@ -129,8 +129,7 @@ export default {
   },
   // Fetches all chat logs on page load. Also updates UI when new message added with onSnaphot.
   created() {
-    let chatLogs = [];
-    // this.$store.dispatch("clearChatLogs");
+    //this.$store.dispatch("clearChatLogs");
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const fireStoreRef = firebase.firestore().collection("userdata");
@@ -144,10 +143,11 @@ export default {
               .collection("chatLogs");
             fireStoreRef2.onSnapshot(snapShot => {
               snapShot.forEach(doc2 => {
-                chatLogs.push(doc2.data().userChatData);
-                this.$store.dispatch("storeChatLogsInState", chatLogs);
+                this.$store.dispatch(
+                  "storeChatLogsInState",
+                  doc2.data().userChatData
+                );
               });
-              chatLogs = [];
             });
           });
         });
@@ -170,7 +170,7 @@ export default {
           profilePicture: this.getProfilePicture
         };
         this.$store.dispatch("addUserChatToFireStore", userChatData);
-        // this.$store.dispatch("storeChatLogsInState", userChatData);
+
         this.chatTyping = "";
       }
       var element = document.getElementById("chatbox");
