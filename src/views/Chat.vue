@@ -142,11 +142,13 @@ export default {
               .doc(userEmail)
               .collection("chatLogs");
             fireStoreRef2.onSnapshot(snapShot => {
-              snapShot.forEach(doc2 => {
-                this.$store.dispatch(
-                  "storeChatLogsInState",
-                  doc2.data().userChatData
-                );
+              snapShot.docChanges().forEach(change => {
+                if (change.type === "added") {
+                  this.$store.dispatch(
+                    "storeChatLogsInState",
+                    change.doc.data().userChatData
+                  );
+                }
               });
             });
           });
