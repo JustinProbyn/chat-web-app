@@ -207,7 +207,8 @@ textarea {
 
 // Loader
 
-.lds-circle {
+.lds-circle-night,
+.lds-circle-day {
   z-index: 999;
   position: absolute;
   left: 58%;
@@ -219,6 +220,10 @@ textarea {
   border-radius: 50%;
   background: #fff;
   animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.lds-circle-day {
+  background: rgb(2, 26, 32);
 }
 
 @keyframes lds-circle {

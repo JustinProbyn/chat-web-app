@@ -1,22 +1,51 @@
 <template class="home">
-  <div @keyup.enter="submit" class="home_container" :class="getTheme ? 'nightmode' : 'daymode'">
+  <div
+    @keyup.enter="submit"
+    class="home_container"
+    :class="getTheme ? 'nightmode' : 'daymode'"
+  >
     <div id="main_panel" @keyup.enter="submit">
-      <div v-if="getChatLogs.length <= 0" class="lds-circle"></div>
+      <div v-if="getTheme" class="nightmodespinner">
+        <div v-if="getChatLogs.length <= 0" class="lds-circle-night"></div>
+      </div>
+      <div v-if="!getTheme" class="daymodespinner">
+        <div v-if="getChatLogs.length <= 0" class="lds-circle-day"></div>
+      </div>
+
       <!--  -->
       <div
-        v-if="!getCurrentUserName && getChatLogs.length <= 0 || getCurrentUserName"
+        v-if="
+          (!getCurrentUserName && getChatLogs.length <= 0) || getCurrentUserName
+        "
         class="sidebar"
       >
         <!-- THEME BUTTONS -->
         <div class="mode_buttons">
-          <button v-if="!getTheme" @click="nightMode" class="mode_button">Night mode</button>
-          <button v-if="getTheme" @click="dayMode" class="mode_button">Day mode</button>
+          <button v-if="!getTheme" @click="nightMode" class="mode_button">
+            Night mode
+          </button>
+          <button v-if="getTheme" @click="dayMode" class="mode_button">
+            Day mode
+          </button>
         </div>
         <!--  -->
         <!-- USER BUTTONS -->
         <div class="sidebar_buttons">
-          <button class="sidebar_button" v-if="getCurrentUserName" @click="displayProfile">Profile</button>
-          <button class="sidebar_button" v-if="getCurrentUserName" @click="signOut">Sign out</button>
+          <button
+            class="sidebar_button"
+            v-if="getCurrentUserName"
+            @click="displayProfile"
+          >
+            Profile
+          </button>
+
+          <button
+            class="sidebar_button"
+            v-if="getCurrentUserName"
+            @click="signOut"
+          >
+            Sign out
+          </button>
         </div>
         <!-- MODALS -->
         <div class="authModals">
@@ -24,13 +53,18 @@
             <profile-page></profile-page>
           </div>
         </div>
+
         <!--  -->
         <div class="channels">CHANNELS</div>
       </div>
       <!-- CHATBOX -->
       <div v-if="getChatLogs.length > 0" id="chatbox">
         <div class="user_image"></div>
-        <div v-for="(data, i) in orderChatsByDate" :key="i" class="text_display">
+        <div
+          v-for="(data, i) in orderChatsByDate"
+          :key="i"
+          class="text_display"
+        >
           <div class="user_icon">
             <img
               class="user_icon-img"
@@ -48,7 +82,9 @@
               <div class="text_display-username">
                 <strong>{{ data.username }}&nbsp;</strong>
               </div>
-              <div class="text_display-date">&nbsp; &nbsp;({{ data.date | moment("from", "now") }})</div>
+              <div class="text_display-date">
+                &nbsp; &nbsp;({{ data.date | moment("from", "now") }})
+              </div>
             </div>
             <div class="chat-text">
               <div class="text_display-chat">{{ data.chat }}</div>
@@ -63,7 +99,9 @@
             :disabled="getChatLogs ? true : false"
             @click="submit"
             class="text_input-button"
-          >Submit</button>
+          >
+            Submit
+          </button>
           <textarea placeholder="Say hi..." v-model="chatTyping" type="text" />
         </div>
       </div>
@@ -111,14 +149,14 @@ export default {
     orderChatsByDate() {
       const timesOrdered = [];
       const datesOrdered = [];
-      this.getChatLogs.forEach(el => {
+      this.getChatLogs.forEach((el) => {
         timesOrdered.push(el.dateMilSec);
         timesOrdered.sort(function(a, b) {
           return a - b;
         });
       });
-      timesOrdered.forEach(timeSec => {
-        this.getChatLogs.forEach(time => {
+      timesOrdered.forEach((timeSec) => {
+        this.getChatLogs.forEach((time) => {
           if (timeSec == time.dateMilSec) {
             datesOrdered.unshift(time);
           }
@@ -130,19 +168,19 @@ export default {
   // Fetches all chat logs on page load. Also updates UI when new message added with onSnaphot.
   created() {
     //this.$store.dispatch("clearChatLogs");
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         const fireStoreRef = firebase.firestore().collection("userdata");
-        fireStoreRef.get().then(snapShot => {
-          snapShot.forEach(doc => {
+        fireStoreRef.get().then((snapShot) => {
+          snapShot.forEach((doc) => {
             const userEmail = doc.data().email;
             const fireStoreRef2 = firebase
               .firestore()
               .collection("userdata")
               .doc(userEmail)
               .collection("chatLogs");
-            fireStoreRef2.onSnapshot(snapShot => {
-              snapShot.docChanges().forEach(change => {
+            fireStoreRef2.onSnapshot((snapShot) => {
+              snapShot.docChanges().forEach((change) => {
                 if (change.type === "added") {
                   this.$store.dispatch(
                     "storeChatLogsInState",

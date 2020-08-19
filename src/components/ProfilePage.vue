@@ -1,12 +1,15 @@
 <template>
   <div class="profile-page">
+    <p class="modal-header">Upload a profile picture</p>
     <div class="change-user-image">
       <input id="file" type="file" @change="imageSelected" />
 
       <button class="upload-button" @click="uploadImage">Upload image</button>
     </div>
     <output id="image"></output>
+
     <div class="change-user-name">
+      <p class="modal-header">Change your username</p>
       <input v-model="newUsername" type="text" />
       <button :disabled="!newUsername ? true : false" @click="changeUsername">Change username</button>
     </div>

@@ -1,10 +1,15 @@
 #profile-modal {
   @include modal();
+  left: -120%;
   width: 95%;
   height: 250px;
   border-radius: 3px;
   justify-self: center;
   padding: 10px;
+  background-color: rgb(240, 240, 240);
+  animation-name: slide-in;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
 
 .profile-page {
@@ -25,6 +30,16 @@
 
 .change-user-name {
   position: absolute;
-  top: 80%;
+  top: 65%;
   left: 8%;
+}
+
+.modal-header {
+  color: black;
+}
+
+@keyframes slide-in {
+  100% {
+    left: 0;
+  }
 }
